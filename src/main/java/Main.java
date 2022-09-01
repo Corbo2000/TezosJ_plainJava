@@ -12,10 +12,13 @@ public class Main
    {
 
       /*
-      
+      */
       // Creates a new wallet with a passphrase.
-      TezosWallet wallet = new TezosWallet("myPassphrase");
-       
+      TezosWallet wallet = new TezosWallet("CorboPassphrase");
+      System.out.print("test45\n");
+      wallet.setProvider("https://testnet-tezos.giganode.io:443");
+      System.out.println(wallet.getPublicKeyHash());
+      /* 
       // Or... creates (imports) a new wallet with its keys. 
       TezosWallet wallet = new TezosWallet(privateKey, publicKey, publicKeyHash, myPassphrase);
        
