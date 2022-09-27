@@ -1,0 +1,33 @@
+{
+    "@id": "dtmi:examplewh:AO;1",
+    "@context": "dtmi:dtdl:context;2",
+    "@type": "Interface",
+    "displayName": "AdminOffice",
+    "contents": [
+        {
+            "@type": "Property",
+            "name": "Temperature",
+            "schema": "double"
+        },
+        {
+            "@type": "Property",
+            "name": "Humidity",
+            "schema": "double"
+        },
+        {
+            "@type": "Property",
+            "name": "PeopleInOffice",
+            "schema": "integer"
+        },
+        {
+            "@type": "Property",
+            "name": "Locked",
+            "schema": "boolean"
+        },
+        {
+            "@type": "Property",
+            "name": "Lights",
+            "schema": "boolean"
+        }
+    ]
+}

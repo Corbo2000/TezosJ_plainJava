@@ -1,0 +1,18 @@
+{
+    "@id": "dtmi:examplewh:Bay;1",
+    "@context": "dtmi:dtdl:context;2",
+    "@type": "Interface",
+    "displayName": "Bay",
+    "contents": [
+        {
+            "@type": "Property",
+            "name": "Use",
+            "schema": "boolean"
+        },
+        {
+            "@type": "Property",
+            "name": "CurrentTruck",
+            "schema": "string"
+        }
+    ]
+}

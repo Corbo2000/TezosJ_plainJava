@@ -2,22 +2,186 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import org.json.JSONObject;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Map;
+import java.util.List;
+import java.util.HashMap;
+
 import milfont.com.tezosj.domain.Crypto;
 import milfont.com.tezosj.helper.Global;
 import milfont.com.tezosj.model.TezosWallet;
 
 public class Main
 {
+   static String calculateHash(MessageDigest digest, File file) throws IOException{
+    
+      //Get file input stream for reading the file content
+      FileInputStream fis = new FileInputStream(file);
+
+      //Create byte array to read data in chunks
+      byte[] byteArray = new byte[1024];
+      int bytesCount = 0; 
+        
+      //Read file data and update in message digest
+      while ((bytesCount = fis.read(byteArray)) != -1) {
+        digest.update(byteArray, 0, bytesCount);
+      };
+      
+      //close the stream; We don't need it now.
+      fis.close();
+      
+      //Get the hash's bytes
+      byte[] bytes = digest.digest();
+      
+      //This bytes[] has bytes in decimal format;
+      //Convert it to hexadecimal format
+      StringBuilder sb = new StringBuilder();
+      for(int i=0; i< bytes.length ;i++)
+      {
+        sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+      }
+      //System.out.println(sb.toString());
+
+      return sb.toString();
+   }
+
+   public static void walk(String path, Map<String, List<String>> map) throws NoSuchAlgorithmException, IOException{
+      MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+      File root = new File( path );
+      File[] list = root.listFiles();
+
+      if (list == null) return;
+      int i = 0;
+      for ( File f : list ) {
+          i++;
+          if ( f.isDirectory() ) {
+              System.out.println( "Dir:" + f.getAbsoluteFile() );
+              walk( f.getAbsolutePath() , map);
+          }
+          else {
+              System.out.println( "File:" + f.getAbsoluteFile() );
+              // System.out.print("File " +i +":");
+              // System.out.println("" +f.getName());
+              // System.out.println(calculateHash(digest, f.getAbsoluteFile()));
+          }
+          // System.out.print("File " +i +":");
+          // System.out.println("" +f.getName());
+          // System.out.println(calculateHash(digest, f.getAbsoluteFile()));
+      }
+   }
    public static void main(String[] args) throws Exception
    {
+
+    Map<String, List<String>> map = new HashMap<>();
+    //File file = new File("D:\\GitHub\\TezosJ\\TezosJ_plainJava\\bin");
+    String pathString = "D:\\GitHub\\TezosJ\\TezosJ_plainJava\\FilesToHash";
+
+    walk(pathString, map);
+
+    //File file = new File("D:\\GitHub\\TezosJ\\TezosJ_plainJava\\FilesToHash\\WarehouseModel.xlsx");
+    //MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+    //String newHash = calculateHash(digest, file);
+    //System.out.println(newHash);
+
+    /*MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+    File root = new File( "D:\\GitHub\\TezosJ\\TezosJ_plainJava\\FilesToHash" );
+    File[] list = root.listFiles();
+
+    if (list == null) return;
+    int i = 0;
+    for ( File f : list ) {
+        i++;
+        // if ( f.isDirectory() ) {
+        //     walk( f.getAbsolutePath());
+        //     System.out.println( "Dir:" + f.getAbsoluteFile() );
+        // }
+        // else {
+        //     System.out.println( "File:" + f.getAbsoluteFile() );
+        // }
+        System.out.print("File " +i +":");
+        System.out.println("" +f.getName());
+        System.out.println(calculateHash(digest, f.getAbsoluteFile()));
+    }*/
+
+    //TezosWallet wallet1 = new TezosWallet("cube security region mouse wash holiday rural pass pretty assist anxiety movie stay success zebra", "CorboPassphrase");
+    //wallet1.setProvider("https://rpc.ghostnet.teztnets.xyz");
+
+    TezosWallet wallet3 = new TezosWallet("venue squirrel woman chimney increase tiger can wreck tag predict help board frown save net", 
+                                          "CorboPassphrase3");
+    wallet3.setProvider("https://rpc.jakartanet.teztnets.xyz");
+    //System.out.println(wallet3.getPublicKeyHash());
+
+    /*BigDecimal amount = new BigDecimal("0");
+    BigDecimal fee = new BigDecimal("0.1");
+    JSONObject jsonObject = wallet3.callContractEntryPoint(wallet3.getPublicKeyHash(), "KT1NR1DEWk6zRcKnqWG67bjSFdU1MdCHFijh", amount,
+                                                            fee, "", "", "fileCheck",
+                                                            new String[]{"WarehouseModel.xlsx", "0368942eeb2415ac23c09636b4b7b2afc487a0b95065e6bb3af137261eb304d7"}, false, Global.GENERIC_STANDARD);
+    String opHash = (String) jsonObject.get("result"); 
+    Boolean opHashIncluded = wallet3.waitForAndCheckResult(opHash, 4);
+    System.out.println(opHashIncluded + " " + opHash);*/
+    //System.out.println(wallet3.getContractStorage("KT1CHqUWjyuyYUi61ppqQ5n5R5NxTamVvtKk"));
+
+    //ArrayList<Map> arrayList;
+
+    //wallet3.waitForAndCheckResult(operationHash, numberOfBlocksToWait)
+
+    //arrayList = wallet3.getContractStorage("KT1CHqUWjyuyYUi61ppqQ5n5R5NxTamVvtKk");
 
       /*
       */
       // Creates a new wallet with a passphrase.
-      TezosWallet wallet = new TezosWallet("CorboPassphrase");
-      System.out.print("test45\n");
-      wallet.setProvider("https://testnet-tezos.giganode.io:443");
-      System.out.println(wallet.getPublicKeyHash());
+      //TezosWallet wallet = new TezosWallet("CorboPassphrase2");
+      //tz1T25UReWaaaZEfvpg3HFWKB3HoXt4EhgaS
+      //String w1Key = "tz1T25UReWaaaZEfvpg3HFWKB3HoXt4EhgaS";
+      //TezosWallet wallet1 = new TezosWallet("cube security region mouse wash holiday rural pass pretty assist anxiety movie stay success zebra", "CorboPassphrase");
+      //tz1VsnrJhJgQvgbLWgAktfRScWNDGh6BmXdP
+      //String w2Key = "tz1VsnrJhJgQvgbLWgAktfRScWNDGh6BmXdP";
+      //TezosWallet wallet2 = new TezosWallet("farm slim athlete spin suggest creek taste select proof cram kingdom local sail manual afford", "CorboPassphrase2");
+      //System.out.print("test45\n");
+      //  wallet1.setProvider("https://rpc.ghostnet.teztnets.xyz");
+      //System.out.println(wallet2.getPublicKeyHash());
+      //System.out.println(wallet2.getMnemonicWords());
+      //System.out.println(wallet2.getBalance());*/
+
+      /*TezosWallet wallet3 = new TezosWallet("CorboPassphrase3");
+      tz1UyUZgwgPmBG5DK5fKfdRxCjgVM4ELzYAS
+      wallet3.setProvider("https://rpc.jakartanet.teztnets.xyz");
+      System.out.println(wallet3.getMnemonicWords());*/
+
+      /*TezosWallet wallet3 = new TezosWallet("venue squirrel woman chimney increase tiger can wreck tag predict help board frown save net", 
+                                            "CorboPassphrase3");
+      wallet3.setProvider("https://rpc.jakartanet.teztnets.xyz");
+      System.out.println(wallet3.getPublicKeyHash());*/
+      //System.out.println(wallet3.getBalance());
+
+      /*BigDecimal amount = new BigDecimal("0");
+      BigDecimal fee = new BigDecimal("0.1");
+      JSONObject jsonObject = wallet1.callContractEntryPoint(wallet1.getPublicKeyHash(), "KT18cCwX5uaknByiMkbniTdsFN41mLVr73fp", amount,
+                                                             fee, "", "", "certify",
+                                                             new String[]{"tz1VsnrJhJgQvgbLWgAktfRScWNDGh6BmXdP", "Ray"}, false, Global.GENERIC_STANDARD);
+      System.out.println(jsonObject.get("result"));*/
+
+      /*BigDecimal amount = new BigDecimal("50");
+      BigDecimal fee = new BigDecimal("0.00294"); 
+      JSONObject jsonObject = wallet3.send("tz1UyUZgwgPmBG5DK5fKfdRxCjgVM4ELzYAS", "tz1LHBZeuAZRFZSDVzib6cJd3VF57DcpJKj2", amount, fee, "", ""); 
+      System.out.println(jsonObject.get("result"));*/
+
+
+      /*BigDecimal amount = new BigDecimal("0");
+      BigDecimal fee = new BigDecimal("0.1");
+      JSONObject jsonObject = wallet1.callContractEntryPoint(wallet1.getPublicKeyHash(), "KT1SXh2qT4xtDm4E7YHKdpWNav5Rj32fpyDC", amount,
+                                                             fee, "", "", "replace",
+                                                             new String[]{"1817"}, false, Global.GENERIC_STANDARD);*/
       /* 
       // Or... creates (imports) a new wallet with its keys. 
       TezosWallet wallet = new TezosWallet(privateKey, publicKey, publicKeyHash, myPassphrase);
@@ -205,4 +369,3 @@ public class Main
       
    }
 }
-

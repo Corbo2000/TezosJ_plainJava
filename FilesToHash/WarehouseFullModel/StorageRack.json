@@ -1,0 +1,23 @@
+{
+    "@id": "dtmi:examplewh:SR;1",
+    "@context": "dtmi:dtdl:context;2",
+    "@type": "Interface",
+    "displayName": "StorageRack",
+    "contents": [
+        {
+            "@type": "Property",
+            "name": "InventoryType",
+            "schema": "string"
+        },
+        {
+            "@type": "Property",
+            "name": "NumberOfUnits",
+            "schema": "integer"
+        },
+        {
+            "@type": "Property",
+            "name": "Capacity",
+            "schema": "double"
+        }
+    ]
+}

@@ -1,0 +1,12 @@
+{
+    "@id": "dtmi:examplewh:Floor;1",
+    "@context": "dtmi:dtdl:context;2",
+    "@type": "Interface",
+    "displayName": "Floor",
+    "contents": [
+        {
+            "@type": "Relationship",
+            "name": "contains"
+        }
+    ]
+}

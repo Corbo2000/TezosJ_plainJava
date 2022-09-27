@@ -1,0 +1,23 @@
+{
+    "@id": "dtmi:examplewh:RA;1",
+    "@context": "dtmi:dtdl:context;2",
+    "@type": "Interface",
+    "displayName": "RepackagingArea",
+    "contents": [
+        {
+            "@type": "Property",
+            "name": "Temperature",
+            "schema": "double"
+        },
+        {
+            "@type": "Property",
+            "name": "Humidity",
+            "schema": "double"
+        },
+        {
+            "@type": "Property",
+            "name": "Orders",
+            "schema": "string"
+        }
+    ]
+}

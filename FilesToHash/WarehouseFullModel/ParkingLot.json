@@ -1,0 +1,18 @@
+{
+    "@id": "dtmi:examplewh:PL;1",
+    "@context": "dtmi:dtdl:context;2",
+    "@type": "Interface",
+    "displayName": "ParkingLot",
+    "contents": [
+        {
+            "@type": "Property",
+            "name": "TotalParkingSpots",
+            "schema": "integer"
+        },
+        {
+            "@type": "Property",
+            "name": "AvailableParkingSpots",
+            "schema": "integer"
+        }
+    ]
+}

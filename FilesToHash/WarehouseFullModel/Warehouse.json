@@ -1,0 +1,27 @@
+{
+    "@id": "dtmi:examplewh:Warehouse;1",
+    "@context": "dtmi:dtdl:context;2",
+    "@type": "Interface",
+    "displayName": "Warehouse",
+    "contents": [
+        {
+            "@type": "Property",
+            "name": "PowerConsumption",
+            "schema": "double"
+        },
+        {
+            "@type": "Property",
+            "name": "Locked",
+            "schema": "boolean"
+        },
+        {
+            "@type": "Property",
+            "name": "Lights",
+            "schema": "boolean"
+        },
+        {
+            "@type": "Relationship",
+            "name": "contains"
+        }
+    ]
+}

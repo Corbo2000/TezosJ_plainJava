@@ -1,0 +1,12 @@
+{
+    "@id": "dtmi:examplewh:Outside;1",
+    "@context": "dtmi:dtdl:context;2",
+    "@type": "Interface",
+    "displayName": "Outside",
+    "contents": [
+        {
+            "@type": "Relationship",
+            "name": "contains"
+        }
+    ]
+}
