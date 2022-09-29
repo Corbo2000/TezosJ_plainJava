@@ -3,13 +3,8 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.io.*;
-import java.util.Map;
-import java.util.List;
-import java.util.HashMap;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import org.json.JSONObject;
-import java.util.concurrent.TimeUnit;
 
 import milfont.com.tezosj.domain.Crypto;
 import milfont.com.tezosj.helper.Global;
@@ -49,7 +44,45 @@ public class Main
       return sb.toString();
    }
 
-   public static void uploadFileHash(String path, Map<String, List<String>> map, TezosWallet wallet) throws NoSuchAlgorithmException, IOException, Exception{
+   public static void verifyFileHash(String path, TezosWallet wallet) throws NoSuchAlgorithmException, IOException, Exception{
+
+    MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+    File root = new File( path );
+    File[] list = root.listFiles();
+
+    if (list == null) return;
+    for ( File f : list ) {
+        if ( f.isDirectory() ) {
+            System.out.println( "Dir:" + f.getAbsoluteFile() );
+            verifyFileHash( f.getAbsolutePath() , wallet);
+        }
+        else {
+            //System.out.println( "File:" + f.getName() );
+
+            BigDecimal amount = new BigDecimal("0");
+            BigDecimal fee = new BigDecimal("0.1");
+            // This Entry Point just needs the right Contract Address
+            JSONObject jsonObject = wallet.callContractEntryPoint(wallet.getPublicKeyHash(), "KT1BaBwc7XnLULgK9VndxFmKrLsTfes9oPki", amount,
+                                                                    fee, "", "", "fileCheck",
+                                                                    new String[]{f.getName(), calculateHash(digest, f.getAbsoluteFile())}, false, Global.GENERIC_STANDARD);
+            String opHash = (String) jsonObject.get("result");
+            while(opHash.length() != 54){
+              jsonObject = wallet.callContractEntryPoint(wallet.getPublicKeyHash(), "KT1BaBwc7XnLULgK9VndxFmKrLsTfes9oPki", amount,
+                                                                    fee, "", "", "fileCheck",
+                                                                    new String[]{f.getName(), calculateHash(digest, f.getAbsoluteFile())}, false, Global.GENERIC_STANDARD);
+              opHash = (String) jsonObject.get("result");
+              //TimeUnit.SECONDS.sleep(5);
+            }
+            Boolean opHashIncluded = wallet.waitForAndCheckResult(opHash, 4);
+            System.out.println("File: " +f.getName() +" - Verified: " +opHashIncluded);
+            //System.out.println("Upload Status: " +opHashIncluded);
+            //System.out.println(opHashIncluded + " " + opHash);
+        }
+    }
+ }
+
+   public static void uploadFileHash(String path, TezosWallet wallet) throws NoSuchAlgorithmException, IOException, Exception{
 
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
@@ -57,12 +90,10 @@ public class Main
       File[] list = root.listFiles();
 
       if (list == null) return;
-      int i = 0;
       for ( File f : list ) {
-          i++;
           if ( f.isDirectory() ) {
               System.out.println( "Dir:" + f.getAbsoluteFile() );
-              uploadFileHash( f.getAbsolutePath() , map, wallet);
+              uploadFileHash( f.getAbsolutePath() , wallet);
           }
           else {
               //System.out.println( "File:" + f.getName() );
@@ -70,12 +101,12 @@ public class Main
               BigDecimal amount = new BigDecimal("0");
               BigDecimal fee = new BigDecimal("0.1");
               // This Entry Point just needs the right Contract Address
-              JSONObject jsonObject = wallet.callContractEntryPoint(wallet.getPublicKeyHash(), "KT1NR1DEWk6zRcKnqWG67bjSFdU1MdCHFijh", amount,
+              JSONObject jsonObject = wallet.callContractEntryPoint(wallet.getPublicKeyHash(), "KT1BaBwc7XnLULgK9VndxFmKrLsTfes9oPki", amount,
                                                                       fee, "", "", "certify",
                                                                       new String[]{f.getName(), calculateHash(digest, f.getAbsoluteFile())}, false, Global.GENERIC_STANDARD);
               String opHash = (String) jsonObject.get("result");
               while(opHash.length() != 54){
-                jsonObject = wallet.callContractEntryPoint(wallet.getPublicKeyHash(), "KT1NR1DEWk6zRcKnqWG67bjSFdU1MdCHFijh", amount,
+                jsonObject = wallet.callContractEntryPoint(wallet.getPublicKeyHash(), "KT1BaBwc7XnLULgK9VndxFmKrLsTfes9oPki", amount,
                                                                       fee, "", "", "certify",
                                                                       new String[]{f.getName(), calculateHash(digest, f.getAbsoluteFile())}, false, Global.GENERIC_STANDARD);
                 opHash = (String) jsonObject.get("result");
@@ -91,14 +122,14 @@ public class Main
 
    public static void main(String[] args) throws Exception
    {
-    // This is Wallet 3 on the Jakartanet Testnet
-    TezosWallet wallet3 = new TezosWallet("venue squirrel woman chimney increase tiger can wreck tag predict help board frown save net", 
-    "CorboPassphrase3"); 
-    wallet3.setProvider("https://rpc.jakartanet.teztnets.xyz");
-    Map<String, List<String>> map = new HashMap<>();
-    String pathString = "D:\\GitHub\\TezosJ\\TezosJ_plainJava\\FilesToHash";
+    // This is Wallet 1 on the Ghostnet Testnet
+    TezosWallet wallet1 = new TezosWallet("cube security region mouse wash holiday rural pass pretty assist anxiety movie stay success zebra", 
+                            "CorboPassphrase");
+    wallet1.setProvider("https://rpc.ghostnet.teztnets.xyz");
+    String pathString = "D:\\GitHub\\TezosJ\\TezosJ_plainJava\\NewFilesToHash";
 
-    uploadFileHash(pathString, map, wallet3); // Goes through every file in File Directory pathString. Doesn't return anything
+    //uploadFileHash(pathString, wallet1); // Goes through every file in File Directory pathString. Doesn't return anything
+    verifyFileHash(pathString, wallet1);
 
     /*
     // This is Wallet 1 on the Ghostnet Testnet
