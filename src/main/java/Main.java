@@ -65,19 +65,17 @@ public class Main
             // This Entry Point just needs the right Contract Address
             JSONObject jsonObject = wallet.callContractEntryPoint(wallet.getPublicKeyHash(), "KT1BaBwc7XnLULgK9VndxFmKrLsTfes9oPki", amount,
                                                                     fee, "", "", "fileCheck",
-                                                                    new String[]{f.getName(), calculateHash(digest, f.getAbsoluteFile())}, false, Global.GENERIC_STANDARD);
+                                                                    new String[]{f.getName(), calculateHash(digest, f.getAbsoluteFile())},
+                                                                    false, Global.GENERIC_STANDARD);
             String opHash = (String) jsonObject.get("result");
             while(opHash.length() != 54){
               jsonObject = wallet.callContractEntryPoint(wallet.getPublicKeyHash(), "KT1BaBwc7XnLULgK9VndxFmKrLsTfes9oPki", amount,
                                                                     fee, "", "", "fileCheck",
                                                                     new String[]{f.getName(), calculateHash(digest, f.getAbsoluteFile())}, false, Global.GENERIC_STANDARD);
               opHash = (String) jsonObject.get("result");
-              //TimeUnit.SECONDS.sleep(5);
             }
             Boolean opHashIncluded = wallet.waitForAndCheckResult(opHash, 4);
             System.out.println("File: " +f.getName() +" - Verified: " +opHashIncluded);
-            //System.out.println("Upload Status: " +opHashIncluded);
-            //System.out.println(opHashIncluded + " " + opHash);
         }
     }
  }
@@ -103,19 +101,18 @@ public class Main
               // This Entry Point just needs the right Contract Address
               JSONObject jsonObject = wallet.callContractEntryPoint(wallet.getPublicKeyHash(), "KT1BaBwc7XnLULgK9VndxFmKrLsTfes9oPki", amount,
                                                                       fee, "", "", "certify",
-                                                                      new String[]{f.getName(), calculateHash(digest, f.getAbsoluteFile())}, false, Global.GENERIC_STANDARD);
+                                                                      new String[]{f.getName(), calculateHash(digest, f.getAbsoluteFile())}, 
+                                                                      false, Global.GENERIC_STANDARD);
               String opHash = (String) jsonObject.get("result");
               while(opHash.length() != 54){
                 jsonObject = wallet.callContractEntryPoint(wallet.getPublicKeyHash(), "KT1BaBwc7XnLULgK9VndxFmKrLsTfes9oPki", amount,
                                                                       fee, "", "", "certify",
-                                                                      new String[]{f.getName(), calculateHash(digest, f.getAbsoluteFile())}, false, Global.GENERIC_STANDARD);
+                                                                      new String[]{f.getName(), calculateHash(digest, f.getAbsoluteFile())},
+                                                                       false, Global.GENERIC_STANDARD);
                 opHash = (String) jsonObject.get("result");
-                //TimeUnit.SECONDS.sleep(5);
               }
               Boolean opHashIncluded = wallet.waitForAndCheckResult(opHash, 4);
               System.out.println("File: " +f.getName() +" - Upload Status: " +opHashIncluded);
-              //System.out.println("Upload Status: " +opHashIncluded);
-              //System.out.println(opHashIncluded + " " + opHash);
           }
       }
    }
@@ -128,8 +125,8 @@ public class Main
     wallet1.setProvider("https://rpc.ghostnet.teztnets.xyz");
     String pathString = "D:\\GitHub\\TezosJ\\TezosJ_plainJava\\NewFilesToHash";
 
-    //uploadFileHash(pathString, wallet1); // Goes through every file in File Directory pathString. Doesn't return anything
-    verifyFileHash(pathString, wallet1);
+    uploadFileHash(pathString, wallet1); // Goes through every file in File Directory pathString. Doesn't return anything
+    //verifyFileHash(pathString, wallet1);
 
     /*
     // This is Wallet 1 on the Ghostnet Testnet
